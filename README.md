@@ -1,0 +1,2 @@
+# powerzoo
+some django lessons
