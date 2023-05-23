@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <ul>
+        {% for category in categories %}
+            <h1>{{category}}</h1>
+            <li>
+                <h2>Animals</h2>
+                <ul>
+                    {% for animal in category.animal_set.all %}
+                    <li>
+                       {{animal}}
+                    </li>
+                    {% endfor %}
+                </ul>
+                <h2>Food</h2>
+                <ul>
+                    {% for food in category.foods.all %}
+                    <li>
+                       {{food}}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
