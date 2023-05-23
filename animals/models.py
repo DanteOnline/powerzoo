@@ -13,8 +13,6 @@ class Category(models.Model):
         return self.name
 
 
-
-
 class Animal(models.Model):
     name = models.CharField(max_length=64)
     # CASCADE, PROTECT, NULL
