@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.functional import cached_property
+from django.db.models.signals import pre_save, post_save, post_delete
+from django.dispatch import receiver
 
 class Food(models.Model):
     name = models.CharField(max_length=128, unique=True)
@@ -9,7 +11,6 @@ class Food(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
     foods = models.ManyToManyField(Food)
-
 
     @cached_property
     def animal_count(self):
@@ -41,3 +42,8 @@ class Card(models.Model):
 
 
 
+@receiver(post_save, sender=Food)
+def my_handler(sender, **kwargs):
+    print('*'*100)
+    print('SENDER', sender)
+    print('kwargs', kwargs)
