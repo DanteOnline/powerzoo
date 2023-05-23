@@ -8,6 +8,8 @@
     <ul>
         {% for category in categories %}
             <h1>{{category}}</h1>
+            {% with category.animal_count as animal_count %}
+            count: {{animal_count}}
             <li>
                 <h2>Animals</h2>
                 <ul>
@@ -26,7 +28,11 @@
                     {% endfor %}
                 </ul>
             </li>
+            count two: {{animal_count}}
+            count three: {{animal_count}}
+            {% endwith %}
         {% endfor %}
     </ul>
+    всего: {{result_count}}
 </body>
 </html>
