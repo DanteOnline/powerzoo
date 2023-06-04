@@ -1,0 +1,44 @@
+version: '3.9'
+
+volumes:
+  static:
+  db-data:
+
+services:
+  database:
+    image: postgres:14.2
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "user123456"
+      POSTGRES_DB: "powerzoo"
+  powerzoo:
+    build:
+      context: .
+    restart: always
+    expose:
+      - 8080
+    volumes:
+      - static:/static/
+    command: bash -c "
+      ./wait-for-postgres.sh database "user" "user123456" "powerzoo"
+      && python manage.py migrate --settings=powerzoo.prod_settings
+      && python manage.py collectstatic --noinput --settings=powerzoo.prod_settings
+      && python manage.py fill_db --settings=powerzoo.prod_settings
+      && gunicorn powerzoo.wsgi -b 0.0.0.0:8080 --workers=1
+      "
+    depends_on:
+      - database
+  nginx:
+    build: ./nginx
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - static:/etc/nginx/static/
+    depends_on:
+      - powerzoo
